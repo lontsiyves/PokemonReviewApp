@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PokemonReviewApp;
 using PokemonReviewApp.Data;
 using System;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddTransient<Seed>();
 var cs = "Server = localhost; Port = 3306; Database = pokemon; Uid = pokemon; Pwd = pokemon";
 builder.Services.AddDbContextPool<AppDbContext>(optionsAction: options => options.UseMySql(cs, ServerVersion.AutoDetect(cs)));
 
@@ -16,6 +18,20 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+    SeedData(app);
+
+void SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<Seed>();
+        service.SeedDataContext();
+    }
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
