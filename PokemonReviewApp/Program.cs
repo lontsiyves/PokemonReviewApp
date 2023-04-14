@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IpokemonRepository, PokemonRepository>();
 var cs = "Server = localhost; Port = 3306; Database = pokemon; Uid = pokemon; Pwd = pokemon";
 builder.Services.AddDbContextPool<AppDbContext>(optionsAction: options => options.UseMySql(cs, ServerVersion.AutoDetect(cs)));
