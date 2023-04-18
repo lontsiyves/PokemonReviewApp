@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PokemonReviewApp.Dto;
 using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
@@ -60,6 +61,34 @@ namespace PokemonReviewApp.Controllers
             return Ok(pokemons);
         }
 
-        
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCategory([FromBody] CategoryDto categoryCreated)
+        {
+            if(categoryCreated == null)
+                return BadRequest(ModelState);
+            var category = _categoryRepository.GetCategories().Where(c => c.Name.Trim().ToUpper() == categoryCreated.Name.TrimEnd().ToUpper()).FirstOrDefault();
+
+            if (category != null)
+            {
+                ModelState.AddModelError("", "Ctagory already exist");
+                return StatusCode(422, ModelState);
+            }
+            if (ModelState.IsValid)
+                return BadRequest(ModelState);
+            var categoryMap = _mapper.Map<Category>(categoryCreated);
+
+            if (!_categoryRepository.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully Created");
+        }
+             
+
+
+
     }
 }

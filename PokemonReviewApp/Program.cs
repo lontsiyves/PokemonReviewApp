@@ -14,6 +14,10 @@ builder.Services.AddTransient<Seed>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IpokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+
+
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 var cs = "Server = localhost; Port = 3306; Database = pokemon; Uid = pokemon; Pwd = pokemon";
 builder.Services.AddDbContextPool<AppDbContext>(optionsAction: options => options.UseMySql(cs, ServerVersion.AutoDetect(cs)));

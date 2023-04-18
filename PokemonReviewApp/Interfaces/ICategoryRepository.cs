@@ -10,6 +10,8 @@ namespace PokemonReviewApp.Interfaces
         ICollection<Category> GetCategories();
         ICollection<Pokemon> GetPokemonsForCategory(int categoryId);
 
+        bool CreateCategory(Category category);
+
 
     }
 }

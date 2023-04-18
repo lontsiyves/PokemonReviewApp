@@ -58,6 +58,13 @@ namespace PokemonReviewApp.Controllers
             return Ok(country);
         }
 
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
 
+        public IActionResult CreateCountry([FromBody]CountryDto country)
+        {
+
+        }
     }
 }
