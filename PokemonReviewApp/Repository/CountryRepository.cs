@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp.Data;
 using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
@@ -34,16 +34,18 @@ namespace PokemonReviewApp.Repository
             return _context.Owners.Where(o => o.Id == ownerId).Select(c => c.Country).FirstOrDefault();
         }
 
-        bool ICountryRepository.CreateCountry(Country country)
+        bool CreateCountry(Country country)
         {
             _context.Add(country);
             _context.SaveChanges();
-            return SaveChangesCompletedEventData()
+            return Save();
         }
 
-        bool ICountryRepository.Save()
+        bool Save()
         {
-            throw new NotImplementedException();
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+            
         }
     }
 }
